@@ -2,6 +2,32 @@
 
 source "`dirname $0`/utils/defs.sh"
 
+function usage {
+    msg "The only available command-line argument is:"
+    msg "  -q or --quiet: silence configure/make output"
+    if [ ! -z $1 ]; then
+      # We're failing because we got the wrong arguments.
+      # explain the behavior and exit with failure
+      msg ""
+      msg "Any other command line argument will print this message"
+      exit 1
+    fi
+}
+
+QUIET=
+case "$1" in
+  -q|--quiet)
+    QUIET="-q"
+    ;;
+  -h|-help|--help)
+    usage
+    exit 0
+    ;;
+  *)
+    usage fail
+    ;;
+esac
+
 # configuration
 export CC=clang
 export CXX=clang++

@@ -20,5 +20,5 @@ git submodule update
 # The reader would also have to verify this repo, and there's no way they
 # can.
 BIN_FILE=binutils-2.24.tar.bz2
-echo Downloading $BIN_FILE
-curl -o "$DISTFILES/$BIN_FILE" "http://ftp.gnu.org/gnu/binutils/$BIN_FILE"
+test ! -f "$DISTFILES/$BIN_FILE" && echo Downloading $BIN_FILE &&
+  curl -o "$DISTFILES/$BIN_FILE" "http://ftp.gnu.org/gnu/binutils/$BIN_FILE"

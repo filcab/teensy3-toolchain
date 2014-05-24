@@ -1,0 +1,11 @@
+#!/bin/sh
+
+FULLCLEAN="$1"
+
+if [[ "$FULLCLEAN" = "--full" ]]; then
+  echo Removing installed files and distfiles
+  rm -rf arm-none-eabi distfiles
+fi
+
+echo Removing build directory
+rm -rf build

@@ -4,7 +4,7 @@ source "`dirname $0`/utils/defs.sh"
 
 function usage {
     msg "The only available command-line argument is:"
-    msg "  -q or --quiet: silence configure/make output"
+    msg "  -q/--quiet/-s/--silent: quiet configure/make output"
     if [ ! -z $1 ]; then
       # We're failing because we got the wrong arguments.
       # explain the behavior and exit with failure
@@ -16,8 +16,8 @@ function usage {
 
 QUIET=
 case "$1" in
-  -q|--quiet)
-    QUIET="-q"
+  -q|--quiet|-s|--silent)
+    QUIET="--quiet"
     ;;
   -h|-help|--help)
     usage
@@ -66,6 +66,6 @@ mkdir -p "$OBJDIR/binutils"
 pushd "$OBJDIR/binutils"
 # Only run configure if there's no Makefile
 test ! -f "$OBJDIR/binutils/Makefile" && (
-  "$SRCDIR/binutils-$BIN_VERSION/configure" --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS \
+  "$SRCDIR/binutils-$BIN_VERSION/configure" $QUIET --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS \
   || die "Error configuring binutils" )
-make all install || die "Error compiling binutils"
+make $QUIET all install || die "Error compiling binutils"

@@ -17,7 +17,7 @@ BIN_VERSION=2.24
 BIN_CONF_FLAGS="--enable-interwork --disable-libstdcxx --disable-werror"
 
 # Directory configs
-pushd `dirname $0` > /dev/null
+pushd `dirname "$0"` > /dev/null
 ROOT=`pwd`
 popd > /dev/null
 
@@ -32,12 +32,12 @@ function die {
 }
 
 function extract_src {
-  pkg=$1
-  ext=$2
-  if [ ! -d $SRCDIR/$pkg ]; then
-    mkdir -p $SRCDIR
-    pushd $SRCDIR
-    tar xf $DISTFILES/$pkg$ext
+  pkg="$1"
+  ext="$2"
+  if [ ! -d "$SRCDIR/$pkg" ]; then
+    mkdir -p "$SRCDIR"
+    pushd "$SRCDIR"
+    tar xf "$DISTFILES/$pkg$ext"
     popd
   fi
 }
@@ -46,9 +46,8 @@ function extract_src {
 extract_src "binutils-$BIN_VERSION" ".tar.bz2"
 mkdir -p "$OBJDIR/binutils"
 pushd "$OBJDIR/binutils"
-"$SRCDIR/binutils-$BIN_VERSION/configure" --prefix=$PREFIX --target=$TARGET $BIN_CONF_FLAGS
+"$SRCDIR/binutils-$BIN_VERSION/configure" --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS
 if [ $? != 0 ]; then
-  die Error in binutils configure
+  die "Error configuring binutils"
 fi
-make all install || die Error compiling binutils
-
+make all install || die "Error compiling binutils"

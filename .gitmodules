@@ -1,0 +1,3 @@
+[submodule "src/pdclib"]
+	path = src/pdclib
+	url = git://github.com/filcab/pdclib.git

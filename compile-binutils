@@ -28,9 +28,9 @@ function extract_src {
   ext="$2"
   if [ ! -d "$SRCDIR/$pkg" ]; then
     mkdir -p "$SRCDIR"
-    pushd "$SRCDIR"
+    pushd "$SRCDIR" >/dev/null
     tar xf "$DISTFILES/$pkg$ext"
-    popd
+    popd >/dev/null
   fi
 }
 

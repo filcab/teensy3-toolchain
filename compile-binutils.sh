@@ -50,8 +50,5 @@ function extract_src {
 extract_src "binutils-$BIN_VERSION" ".tar.bz2"
 mkdir -p "$OBJDIR/binutils"
 pushd "$OBJDIR/binutils"
-"$SRCDIR/binutils-$BIN_VERSION/configure" --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS
-if [ $? != 0 ]; then
-  die "Error configuring binutils"
-fi
+"$SRCDIR/binutils-$BIN_VERSION/configure" --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS || die "Error configuring binutils"
 make all install || die "Error compiling binutils"

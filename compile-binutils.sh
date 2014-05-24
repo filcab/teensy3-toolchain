@@ -12,8 +12,12 @@ TARGET=arm-none-eabi
 # versions for the files in $ROOT/distfiles
 BIN_VERSION=2.24
 
-# The CPPFLAGS are a hack to make bfd play well when calling abs with a
-# bfd_signed_vma on a 64-bit host
+# We disable -Werror because the binutils people use deprecated functions
+# that aren't in POSIX anymore, and silently truncate longs to ints in
+# code that doesn't appear (target) 64-bit safe, but that shouldn't be a
+# problem for my use-case. They don't seem to care because part of this
+# comes from a warning that gcc doesn't have, and the other part is
+# because I'm not using glibc.
 BIN_CONF_FLAGS="--enable-interwork --disable-libstdcxx --disable-werror"
 
 # Directory configs

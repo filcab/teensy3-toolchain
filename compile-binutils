@@ -1,10 +1,13 @@
 #!/bin/sh
 
+source "`dirname $0`/utils/defs.sh"
+
 # configuration
 export CC=clang
 export CXX=clang++
 export LD=clang
 TARGET=arm-none-eabi
+PREFIX="$ROOT/$TARGET"
 
 # We're assuming 'tar xf file' will autodetect compression
 # if yours doesn't, change the extract_src function
@@ -19,21 +22,6 @@ BIN_VERSION=2.24
 # comes from a warning that gcc doesn't have, and the other part is
 # because I'm not using glibc.
 BIN_CONF_FLAGS="--enable-interwork --disable-libstdcxx --disable-werror"
-
-# Directory configs
-pushd `dirname "$0"` > /dev/null
-ROOT=`pwd`
-popd > /dev/null
-
-DISTFILES="$ROOT/distfiles"
-SRCDIR="$ROOT/src"
-OBJDIR="$ROOT/build"
-PREFIX="$ROOT/$TARGET"
-
-function die {
-  echo $*
-  exit 1
-}
 
 function extract_src {
   pkg="$1"

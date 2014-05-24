@@ -15,3 +15,4 @@ Assumptions made on the scripts:
   - Dependencies for binutils are installed (at the very least, compiler + sh shell)
   
   - In the future, it will be assumed a (recent) clang capable of targeting ARM (preferably with -mcpu=cortex-m4) is available (for pdclib and actual compilation).
+  - cmake and ninja will be assumed by the instructions I'll write here. But since I'll be using cmake, make or another of cmake's generator will be able to replace ninja.

@@ -50,5 +50,5 @@ pushd "$OBJDIR/binutils"
 if [ $? != 0 ]; then
   die Error in binutils configure
 fi
-make || die Error compiling binutils
+make all install || die Error compiling binutils
 

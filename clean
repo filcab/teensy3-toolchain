@@ -39,6 +39,9 @@ case "$1" in
     exit
     ;;
 
+  --full)
+    # skip. To be dealt with later.
+    ;;
   # Default case
   *)
     if [ ! -z "$1" ]; then

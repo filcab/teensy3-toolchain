@@ -5,12 +5,13 @@ CMAKE_ARGS=("-DCMAKE_TOOLCHAIN_FILE=$ROOT/cmake/toolchain.cmake"
             "-DTEENSY3_PREFIX=$PREFIX"
             "-DTEENSY3_TARGET=arm-none-eabi"
             "-DTOOLCHAIN_DIR=$ROOT"
-            "--debug-output"
             )
 
 function usage {
     msg "The only available command-line argument is:"
     msg "  -v or --verbose: verbose output from Ninja"
+    msg
+    msg "This script forwards \$MAKEOPTS if it's defined"
     if [ ! -z $1 ]; then
       # We're failing because we got the wrong arguments.
       # explain the behavior and exit with failure
@@ -50,11 +51,11 @@ cmake "${CMAKE_ARGS[@]}" "$PDCSRC" -G "$CMAKE_GENERATOR"
 case "$CMAKE_GENERATOR" in
   Ninja)
     msg "Running ninja"
-    ninja $VERBOSE || die
+    ninja $VERBOSE install || die
     ;;
   Makefiles)
     msg "Running make"
-    make $MAKEOPTS || die
+    make $MAKEOPTS install || die
     ;;
   *)
     die "Don't know how to build files with $CMAKE_GENERATOR"

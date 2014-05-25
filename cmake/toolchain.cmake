@@ -7,26 +7,35 @@
 #                   binutils for arm-none-eabi
 #   TOOLCHAIN_DIR:  The root of our toolchain, with build and src
 #                   directories.
+
+# If we're using this toolchain definition but haven't defined the three
+# base vars, try to make a best-effort definition.
 if (NOT DEFINED TOOLCHAIN_DIR)
-  # Sadly try_compile doesn't propagate CMAKE_TOOLCHAIN_FILE, so we can't
-  # use it to derive the TOOLCHAIN_DIR.
-  #get_filename_component(TOOLCHAIN_DIR "${CMAKE_TOOLCHAIN_FILE}" PATH)
-  set(XXX_TOOLCHAIN_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-  if ("${TOOLCHAIN_DIR}" MATCHES "src/pdclib$")
+  set(XXX_TOOLCHAIN_DIR "${CMAKE_SOURCE_DIR}")
+  if ("${XXX_TOOLCHAIN_DIR}" MATCHES "src/pdclib$")
     # fix our source, when this file is used with a plain pdclib build
-    get_filename_component(XXX_PARENT_DIR "${TOOLCHAIN_DIR}" DIRECTORY)
+    get_filename_component(XXX_PARENT_DIR "${XXX_TOOLCHAIN_DIR}" DIRECTORY)
     get_filename_component(XXX_PARENT_DIR "${XXX_PARENT_DIR}" DIRECTORY)
     set(XXX_TOOLCHAIN_DIR "${XXX_PARENT_DIR}")
   endif()
   set(TOOLCHAIN_DIR "${XXX_TOOLCHAIN_DIR}" CACHE PATH "Toolchain directory")
+  message("-- TOOLCHAIN_DIR (guessed): ${TOOLCHAIN_DIR}")
+else()
+  set(TOOLCHAIN_DIR "${TOOLCHAIN_DIR}" CACHE PATH "Toolchain directory")
 endif()
 
 if (NOT DEFINED TEENSY3_PREFIX)
   set(TEENSY3_PREFIX "${TOOLCHAIN_DIR}/prefix" CACHE PATH "Prefix to use for the teensy3 toolchain")
+  message("-- TEENSY3_PREFIX (guessed): ${TEENSY3_PREFIX}")
+else()
+  set(TEENSY3_PREFIX "${TEENSY3_PREFIX}" CACHE PATH "Prefix to use for the teensy3 toolchain")
 endif()
 
 if (NOT DEFINED TEENSY3_TARGET)
   set(TEENSY3_TARGET "arm-none-eabi" CACHE STRING "Target to use for teensy3")
+  message("-- TEENSY3_TARGET (guessed): ${TEENSY3_TARGET}")
+else()
+  set(TEENSY3_TARGET "${TEENSY3_TARGET}" CACHE PATH "Target to use for teensy3")
 endif()
 
 # Prioritize the built binutils programs

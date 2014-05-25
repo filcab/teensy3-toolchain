@@ -12,9 +12,16 @@ popd > /dev/null
 DISTFILES="$ROOT/distfiles"
 SRCDIR="$ROOT/src"
 OBJDIR="$ROOT/build"
+PREFIX="$ROOT/prefix"
+TARGET=arm-none-eabi
+
+# configuration (always use clang)
+export CC=clang
+export CXX=clang++
+export LD=clang
 
 function die {
-  echo DIE: "$*"
+  test ! -z "$1" && echo DIE: "$*"
   exit 1
 }
 

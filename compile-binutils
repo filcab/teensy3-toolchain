@@ -24,16 +24,10 @@ case "$1" in
     exit 0
     ;;
   *)
-    usage fail
+    # Only fail if an argument was provided
+    test ! -z "$1" && usage fail
     ;;
 esac
-
-# configuration
-export CC=clang
-export CXX=clang++
-export LD=clang
-TARGET=arm-none-eabi
-PREFIX="$ROOT/$TARGET"
 
 # We're assuming 'tar xf file' will autodetect compression
 # if yours doesn't, change the extract_src function
@@ -63,9 +57,12 @@ function extract_src {
 # binutils
 extract_src "binutils-$BIN_VERSION" ".tar.bz2"
 mkdir -p "$OBJDIR/binutils"
-pushd "$OBJDIR/binutils"
+pushd "$OBJDIR/binutils" >/dev/null
 # Only run configure if there's no Makefile
+msg "Configuring binutils"
 test ! -f "$OBJDIR/binutils/Makefile" && (
   "$SRCDIR/binutils-$BIN_VERSION/configure" $QUIET --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS \
   || die "Error configuring binutils" )
+msg "Compiling and installing binutils to $PREFIX"
 make $QUIET all install || die "Error compiling binutils"
+popd >/dev/null

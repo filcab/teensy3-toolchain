@@ -1,5 +1,5 @@
-/arm-none-eabi
 /build
 /distfiles
+/prefix
 
 /src/*

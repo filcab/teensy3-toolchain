@@ -1,3 +1,6 @@
 [submodule "src/pdclib"]
 	path = src/pdclib
 	url = git://github.com/filcab/pdclib.git
+[submodule "src/teensy-core"]
+	path = src/teensy-core
+	url = git://github.com/filcab/teensy-core

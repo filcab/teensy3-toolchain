@@ -1,0 +1,64 @@
+#!/bin/sh
+
+source "`dirname $0`/utils/defs.sh"
+CMAKE_ARGS=("-DCMAKE_TOOLCHAIN_FILE=$ROOT/cmake/toolchain.cmake"
+            "-DTEENSY3_PREFIX=$PREFIX"
+            "-DTEENSY3_TARGET=arm-none-eabi"
+            "-DTOOLCHAIN_DIR=$ROOT"
+            "--debug-output"
+            )
+
+function usage {
+    msg "The only available command-line argument is:"
+    msg "  -v or --verbose: verbose output from Ninja"
+    if [ ! -z $1 ]; then
+      # We're failing because we got the wrong arguments.
+      # explain the behavior and exit with failure
+      msg ""
+      msg "Any other command line argument will print this message"
+      exit 1
+    fi
+}
+
+VERBOSE=
+case "$1" in
+  -v|--verbose)
+    VERBOSE=-v
+    ;;
+  -h|-help|--help)
+    usage
+    exit 0
+    ;;
+  *)
+    # Only fail if an argument was provided
+    test ! -z "$1" && usage fail
+    ;;
+esac
+
+if [ -z "$CMAKE_GENERATOR" ]; then
+  CMAKE_GENERATOR=Ninja
+fi
+
+PDCSRC="$SRCDIR/pdclib"
+PDCOBJ="$OBJDIR/pdclib"
+
+mkdir -p "$PDCOBJ"
+pushd "$PDCOBJ" >/dev/null
+
+msg "Running cmake"
+cmake "${CMAKE_ARGS[@]}" "$PDCSRC" -G "$CMAKE_GENERATOR"
+case "$CMAKE_GENERATOR" in
+  Ninja)
+    msg "Running ninja"
+    ninja $VERBOSE || die
+    ;;
+  Makefiles)
+    msg "Running make"
+    make $MAKEOPTS || die
+    ;;
+  *)
+    die "Don't know how to build files with $CMAKE_GENERATOR"
+    ;;
+esac
+
+popd >/dev/null

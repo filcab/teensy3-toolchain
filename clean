@@ -16,6 +16,11 @@ case "$1" in
     rm -rf "$OBJDIR/pdclib"
     exit
     ;;
+  core|teensy|teensy-core)
+    msg "Removing teensy-core build dir"
+    rm -rf "$OBJDIR/teensy-core"
+    exit
+    ;;
 
   # Dir-specific
   distfiles)
@@ -45,7 +50,7 @@ case "$1" in
   # Default case
   *)
     if [ ! -z "$1" ]; then
-      # die if we didn't unserstand the argument
+      # die if we didn't understand the argument
       die "Don't know how to clean $1"
     fi
     ;;

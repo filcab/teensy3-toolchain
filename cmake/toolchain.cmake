@@ -33,10 +33,10 @@ endif()
 set(CMAKE_FIND_ROOT_PATH "${TEENSY3_PREFIX}")
 #set(CMAKE_PREFIX_PATH "${TOOLCHAIN_DIR}/${TEENSY3_TARGET}" ${CMAKE_PREFIX_PATH})
 
-set(CMAKE_INSTALL_PREFIX "${TEENSY3_PREFIX}")
-
+set(CMAKE_INSTALL_PREFIX "${TEENSY3_PREFIX}" CACHE PATH "Install prefix for the built libraries")
 
 set(CMAKE_SYSTEM_NAME Generic)
+
 # Let's avoid forcing the compiler if we can. We'll assume the compiler is
 # clang and it can generate code for a cortex-m4
 #include(CMakeForceCompiler)

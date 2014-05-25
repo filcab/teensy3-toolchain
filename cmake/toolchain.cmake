@@ -46,11 +46,14 @@ set(CMAKE_INSTALL_PREFIX "${TEENSY3_PREFIX}" CACHE PATH "Install prefix for the 
 
 set(CMAKE_SYSTEM_NAME Generic)
 
-# Let's avoid forcing the compiler if we can. We'll assume the compiler is
-# clang and it can generate code for a cortex-m4
-#include(CMakeForceCompiler)
-#CMAKE_FORCE_C_COMPILER(arm-none-eabi-clang GNU)
-#CMAKE_FORCE_CXX_COMPILER(arm-none-eabi-clang++ GNU)
+# We have to force the C compiler, otherwise CMake's tests for the
+# compiler won't work, since we want to compile a libc and don't have
+# access to one.
+include(CMakeForceCompiler)
+CMAKE_FORCE_C_COMPILER("$ENV{CC}" GNU)
+CMAKE_FORCE_CXX_COMPILER("$ENV{CXX}" GNU)
+#CMAKE_FORCE_C_COMPILER(clang GNU)
+#CMAKE_FORCE_CXX_COMPILER(clang++ GNU)
 
 set(TEENSY3_FLAGS "--target=${TEENSY3_TARGET} -mcpu=cortex-m4 -mthumb -D__MK20DX128__ -DF_CPU=48000000" CACHE STRING "Teensy3 specific flags")
 #set(TEENSY3_ARDUINO_FLAGS "-DARDUIO=105 -DTEENSYDUINO=118")

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+source "`dirname $0`/utils/defs.sh"
+
+./compile-binutils || die "Error compiling binutils"
+./compile-pdclib || die "Error compiling pdclib"
+

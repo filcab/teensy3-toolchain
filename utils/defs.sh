@@ -13,6 +13,7 @@ DISTFILES="$ROOT/distfiles"
 SRCDIR="$ROOT/src"
 OBJDIR="$ROOT/build"
 PREFIX="$ROOT/prefix"
+PROJDIR="$ROOT/projects"
 TARGET=arm-none-eabi
 
 # configuration (always use clang)

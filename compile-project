@@ -1,0 +1,71 @@
+#!/bin/sh
+
+source "`dirname $0`/utils/defs.sh"
+CMAKE_ARGS=("-DCMAKE_TOOLCHAIN_FILE:PATH=$ROOT/cmake/toolchain.cmake"
+            "-DTEENSY3_PREFIX:PATH=$PREFIX"
+            "-DTEENSY3_TARGET:STRING=arm-none-eabi"
+            "-DTOOLCHAIN_DIR:PATH=$ROOT"
+            )
+
+function usage {
+    msg "Usage: $(basename $0) project"
+    msg "Compiles and links the project \`project'"
+    msg
+    msg "The only available command-line argument is:"
+    msg "  -v or --verbose: verbose output from Ninja"
+    msg
+    msg "This script forwards \$MAKEOPTS if it's defined"
+    if [ ! -z $1 ]; then
+      # We're failing because we got the wrong arguments.
+      # explain the behavior and exit with failure
+      msg ""
+      msg "Any other command line argument will print this message"
+      exit 1
+    fi
+}
+
+VERBOSE=-v
+case "$1" in
+  -v|--verbose)
+    VERBOSE=-v
+    ;;
+  -h|-help|--help)
+    usage
+    exit 0
+    ;;
+  *)
+    if [ -d "$PROJDIR/$1" ]; then
+      PROJSRC="$PROJDIR/$1"
+      PROJOBJ="$PROJDIR/built-$1"
+    else
+      # Fail if the specified project doesn't exist or if no project was
+      # specified
+      usage fail
+    fi
+    ;;
+esac
+
+if [ -z "$CMAKE_GENERATOR" ]; then
+  CMAKE_GENERATOR=Ninja
+fi
+
+mkdir -p "$PROJOBJ"
+pushd "$PROJOBJ" >/dev/null
+
+msg "Running cmake"
+cmake "${CMAKE_ARGS[@]}" "$PROJSRC" -G "$CMAKE_GENERATOR"
+case "$CMAKE_GENERATOR" in
+  Ninja)
+    msg "Running ninja"
+    ninja $VERBOSE || die
+    ;;
+  Makefiles)
+    msg "Running make"
+    make $MAKEOPTS || die
+    ;;
+  *)
+    die "Don't know how to build files with $CMAKE_GENERATOR"
+    ;;
+esac
+
+popd >/dev/null

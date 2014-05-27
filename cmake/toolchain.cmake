@@ -40,7 +40,7 @@ endif()
 
 # Prioritize the built binutils programs
 set(CMAKE_FIND_ROOT_PATH "${TEENSY3_PREFIX}")
-#set(CMAKE_PREFIX_PATH "${TOOLCHAIN_DIR}/${TEENSY3_TARGET}" ${CMAKE_PREFIX_PATH})
+set(CMAKE_PREFIX_PATH "${TEENSY3_PREFIX}/${TEENSY3_TARGET}" ${CMAKE_PREFIX_PATH})
 
 set(CMAKE_INSTALL_PREFIX "${TEENSY3_PREFIX}" CACHE PATH "Install prefix for the built libraries")
 
@@ -55,7 +55,7 @@ CMAKE_FORCE_CXX_COMPILER("$ENV{CXX}" GNU)
 #CMAKE_FORCE_C_COMPILER(clang GNU)
 #CMAKE_FORCE_CXX_COMPILER(clang++ GNU)
 
-set(TEENSY3_FLAGS "--target=${TEENSY3_TARGET} -mcpu=cortex-m4 -mthumb -D__MK20DX128__ -DF_CPU=48000000" CACHE STRING "Teensy3 specific flags")
+set(TEENSY3_FLAGS "--target=${TEENSY3_TARGET} -mcpu=cortex-m4 -mthumb \"--sysroot=${TEENSY3_PREFIX}\" -D__MK20DX128__ -DF_CPU=48000000" CACHE STRING "Teensy3 specific flags")
 #set(TEENSY3_ARDUINO_FLAGS "-DARDUIO=105 -DTEENSYDUINO=118")
 set(COMMON_FLAGS "-ffunction-sections -fdata-sections -fcolor-diagnostics -fno-exceptions ${TEENSY3_FLAGS}" CACHE STRING "Common compilation flags")
 set(CMAKE_C_FLAGS "-std=c11 ${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
@@ -68,9 +68,15 @@ include_directories(SYSTEM "${TEENSY3_PREFIX}/include")
 #include_directories(SYSTEM "${TOOLCHAIN_DIR}/../source/include")
 #link_directories("${TOOLCHAIN_DIR}/../lib")
 
-#set(DEFAULT_OBJECTS "\"${TOOLCHAIN_DIR}/../lib/init.o\"")
-#set(LINK_LINE "arm-none-eabi-ld -T \"${TOOLCHAIN_DIR}/STM32F103RB.ld\" -nostdlib -nodefaultlib -gc-sections <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> ${DEFAULT_OBJECTS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES> -lpdc -lcore -lperipherals -lclang_rt.arm")
+set(DEFAULT_OBJECTS "${TEENSY3_PREFIX}/lib/mk20dx128.o")
+set(LINKER_SCRIPT "${TEENSY3_PREFIX}/lib/mk20dx128.ld")
+link_directories("${TEENSY3_PREFIX}/lib")
 
-#set(CMAKE_C_LINK_EXECUTABLE ${LINK_LINE})
+find_program(AR_PROGRAM "${TEENSY3_TARGET}-ar")
+find_program(SIZE_PROGRAM "${TEENSY3_TARGET}-size")
+find_program(OBJCOPY_PROGRAM "${TEENSY3_TARGET}-objcopy")
+find_program(LINKER_PROGRAM "${TEENSY3_TARGET}-ld")
+set(LINK_LINE "\"${LINKER_PROGRAM}\" -T\"${LINKER_SCRIPT}\" -nostdlib -nodefaultlib -gc-sections <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> ${DEFAULT_OBJECTS} <OBJECTS> <LINK_LIBRARIES> -lpdc -lteensy-core -o <TARGET>") # -lclang_rt.arm")
 
-#set(CMAKE_CXX_LINK_EXECUTABLE ${LINK_LINE})
+set(CMAKE_C_LINK_EXECUTABLE ${LINK_LINE})
+set(CMAKE_CXX_LINK_EXECUTABLE ${LINK_LINE})

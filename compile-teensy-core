@@ -2,9 +2,9 @@
 
 source "`dirname $0`/utils/defs.sh"
 CMAKE_ARGS=("-DCMAKE_TOOLCHAIN_FILE:PATH=$ROOT/cmake/toolchain.cmake"
+            "-DTOOLCHAIN_DIR:PATH=$ROOT"
             "-DTEENSY3_PREFIX:PATH=$PREFIX"
             "-DTEENSY3_TARGET:STRING=arm-none-eabi"
-            "-DTOOLCHAIN_DIR:PATH=$ROOT"
             )
 
 function usage {

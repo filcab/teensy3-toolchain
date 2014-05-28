@@ -43,6 +43,11 @@ case "$1" in
     rm -rf "$SRCDIR"
     exit
     ;;
+  proj|project|projects)
+    msg "Removing built projects"
+    rm -rf "$PROJDIR/built-*"
+    exit
+    ;;
 
   --full)
     # skip. To be dealt with later.
@@ -61,5 +66,5 @@ rm -rf "$OBJDIR"
 
 if [[ "$FULLCLEAN" = "--full" ]]; then
   msg "Removing prefix dir and distfiles"
-  rm -rf "$PREFIX" "$DISTFILES"
+  rm -rf "$PREFIX" "$DISTFILES" "$PROJDIR/built-*"
 fi

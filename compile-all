@@ -2,7 +2,14 @@
 
 source "`dirname $0`/utils/defs.sh"
 
-./compile-binutils || die "Error compiling binutils"
-./compile-pdclib || die "Error compiling pdclib"
-./compile-teensy-core || die "Error compiling teensy-core"
+BIN_FILE=binutils-2.24.tar.bz2
+if [ ! -f "$DISTFILES/$BIN_FILE" ]; then
+  msg "$BIN_FILE not present. Downloading distfiles"
+  msg "  and initializing git submodules"
+  "$ROOT/fetch"
+fi
+
+"$ROOT/compile-binutils" || die "Error compiling binutils"
+"$ROOT/compile-pdclib" || die "Error compiling pdclib"
+"$ROOT/compile-teensy-core" || die "Error compiling teensy-core"
 

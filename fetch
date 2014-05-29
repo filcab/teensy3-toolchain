@@ -6,7 +6,7 @@ mkdir -p "$DISTFILES"
 
 # Deal with git submodules first
 msg Updating submodules
-if [ ! -d "$SRCDIR/pdclib" ]; then
+if [ ! -d "$SRCDIR/pdclib/CMakeLists.txt" ]; then
   git submodule init
 fi
 git submodule update

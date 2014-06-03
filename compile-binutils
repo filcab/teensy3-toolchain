@@ -64,5 +64,5 @@ test ! -f "$OBJDIR/binutils/Makefile" && (
   "$SRCDIR/binutils-$BIN_VERSION/configure" $QUIET --prefix="$PREFIX" --target="$TARGET" $BIN_CONF_FLAGS \
   || die "Error configuring binutils" )
 msg "Compiling and installing binutils to $PREFIX"
-make $QUIET all install || die "Error compiling binutils"
+make $QUIET all install-binutils install-ld || die "Error compiling binutils"
 popd >/dev/null

@@ -22,7 +22,7 @@ export CXX=clang++
 export LD=clang
 
 function die {
-  test ! -z "$1" && echo DIE: "$*"
+  test ! -z "$1" && echo "error:" "$*"
   exit 1
 }
 
